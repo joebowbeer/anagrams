@@ -10,13 +10,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
-import java.util.stream.Accumulators;
+import java.util.stream.ConcurrentCollectors;
 import java.util.stream.Stream;
 
 public class Anagrams {
 
     public static void main(String[] args) throws IOException {
-        assert args.length == 1; // words path
+        assert args.length == 1; // path-to-words
         Path path = FileSystems.getDefault().getPath(args[0]);
         try (BufferedReader r = Files.newBufferedReader(path, Charset.defaultCharset())) {
             anagrams(r.lines()).forEach(System.out::println);
@@ -24,8 +24,9 @@ public class Anagrams {
     }
 
     public static Stream<Collection<String>> anagrams(Stream<String> words) {
-        Map<String, Collection<String>> map = words.accumulate(
-                Accumulators.<String, String>groupBy(Anagrams::key));
+        Map<String, Collection<String>> map = words.parallel().collectUnordered(
+                // TODO: groupBy(Anagrams::key) - without ambiguity?
+                ConcurrentCollectors.<String, String>groupBy(Anagrams::key));
         return map.values().parallelStream().filter(v -> v.size() > 1);
     } 
 
@@ -36,28 +37,17 @@ public class Anagrams {
     }
 
     public static Collection<String> anagramWithMostLetters(Stream<String> words) {
-        return anagrams(words).max(mostLetters).orElse(() -> null);
+        return anagrams(words).max(mostLetters).orElse(() -> null); // TODO: orElse(null)?
     }
 
     public static Collection<String> anagramWithMostWords(Stream<String> words) {
-        return anagrams(words).max(mostWords).orElse(() -> null);
+        return anagrams(words).max(mostWords).orElse(() -> null); // TODO: orElse(null)?
     }
 
-    private static Comparator<Collection<String>> mostLetters = new MostLettersComparator();
+    private static Comparator<Collection<String>> mostLetters =
+            (Collection<String> o1, Collection<String> o2)
+                -> o1.iterator().next().length() - o2.iterator().next().length();
 
-    private static Comparator<Collection<String>> mostWords = new MostWordsComparator();
-
-    private static class MostLettersComparator implements Comparator<Collection<String>> {
-        @Override
-        public int compare(Collection<String> o1, Collection<String> o2) {
-            return o1.iterator().next().length() - o2.iterator().next().length();
-        }
-    }
-
-    private static class MostWordsComparator implements Comparator<Collection<String>> {
-        @Override
-        public int compare(Collection<String> o1, Collection<String> o2) {
-            return o1.size() - o2.size();
-        }
-    }
+    private static Comparator<Collection<String>> mostWords =
+            (Collection<String> o1, Collection<String> o2) -> o1.size() - o2.size();
 }
