@@ -9,7 +9,6 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Map;
 import java.util.stream.ConcurrentCollectors;
 import java.util.stream.Stream;
 
@@ -24,10 +23,10 @@ public class Anagrams {
     }
 
     public static Stream<Collection<String>> anagrams(Stream<String> words) {
-        Map<String, Collection<String>> map = words.parallel().collectUnordered(
-                // TODO: groupBy(Anagrams::key) - without ambiguity?
-                ConcurrentCollectors.<String, String>groupBy(Anagrams::key));
-        return map.values().parallelStream().filter(v -> v.size() > 1);
+        return words.parallel()
+                // TODO: groupBy(Anagrams::key) - w/o ambiguity?
+                .collectUnordered(ConcurrentCollectors.<String, String>groupBy(Anagrams::key))
+                .values().parallelStream().filter(v -> v.size() > 1);
     } 
 
     private static String key(String s) {
