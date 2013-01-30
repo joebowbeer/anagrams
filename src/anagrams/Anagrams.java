@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.stream.ConcurrentCollectors;
+import static java.util.stream.ConcurrentCollectors.groupBy;
 import java.util.stream.Stream;
 
 public class Anagrams {
@@ -23,9 +23,7 @@ public class Anagrams {
     }
 
     public static Stream<Collection<String>> anagrams(Stream<String> words) {
-        return words.parallel()
-                // TODO: groupBy(Anagrams::key) - w/o ambiguity?
-                .collectUnordered(ConcurrentCollectors.<String, String>groupBy(Anagrams::key))
+        return words.parallel().collectUnordered(groupBy(Anagrams::key))
                 .values().parallelStream().filter(v -> v.size() > 1);
     } 
 
