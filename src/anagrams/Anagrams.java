@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import static java.util.stream.ConcurrentCollectors.groupBy;
+import static java.util.stream.ConcurrentCollectors.groupingBy;
 import java.util.stream.Stream;
 
 public class Anagrams {
@@ -23,7 +23,7 @@ public class Anagrams {
     }
 
     public static Stream<Collection<String>> anagrams(Stream<String> words) {
-        return words.parallel().collectUnordered(groupBy(Anagrams::key))
+        return words.parallel().collectUnordered(groupingBy(Anagrams::key))
                 .values().parallelStream().filter(v -> v.size() > 1);
     } 
 
@@ -41,10 +41,10 @@ public class Anagrams {
         return anagrams(words).max(mostWords).orElse(() -> null); // TODO: orElse(null)?
     }
 
-    private static Comparator<Collection<String>> mostLetters =
+    private static final Comparator<Collection<String>> mostLetters =
             (Collection<String> o1, Collection<String> o2)
                 -> o1.iterator().next().length() - o2.iterator().next().length();
 
-    private static Comparator<Collection<String>> mostWords =
+    private static final Comparator<Collection<String>> mostWords =
             (Collection<String> o1, Collection<String> o2) -> o1.size() - o2.size();
 }
