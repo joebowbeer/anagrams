@@ -34,11 +34,11 @@ public class Anagrams {
     }
 
     public static Collection<String> anagramWithMostLetters(Stream<String> words) {
-        return anagrams(words).max(mostLetters).orElse(() -> null); // TODO: orElse(null)?
+        return anagrams(words).max(mostLetters).orElse(null);
     }
 
     public static Collection<String> anagramWithMostWords(Stream<String> words) {
-        return anagrams(words).max(mostWords).orElse(() -> null); // TODO: orElse(null)?
+        return anagrams(words).max(mostWords).orElse(null);
     }
 
     private static final Comparator<Collection<String>> mostLetters =
