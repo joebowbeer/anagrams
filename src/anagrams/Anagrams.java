@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import static java.util.stream.ConcurrentCollectors.groupingBy;
+import static java.util.stream.Collectors.groupingBy;
 import java.util.stream.Stream;
 
 public class Anagrams {
