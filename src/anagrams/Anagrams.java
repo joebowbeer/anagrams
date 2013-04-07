@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import static java.util.stream.Collectors.groupingBy;
 import java.util.stream.Stream;
 
@@ -22,7 +23,7 @@ public class Anagrams {
         }
     }
 
-    public static Stream<Collection<String>> anagrams(Stream<String> words) {
+    public static Stream<List<String>> anagrams(Stream<String> words) {
         return words.parallel().collectUnordered(groupingBy(Anagrams::key))
                 .values().parallelStream().filter(v -> v.size() > 1);
     } 
