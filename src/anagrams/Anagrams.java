@@ -24,7 +24,7 @@ public class Anagrams {
     }
 
     public static Stream<List<String>> anagrams(Stream<String> words) {
-        return words.parallel().collectUnordered(groupingBy(Anagrams::key))
+        return words.parallel().collect(groupingBy(Anagrams::key))
                 .values().parallelStream().filter(v -> v.size() > 1);
     } 
 
