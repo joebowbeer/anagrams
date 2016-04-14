@@ -8,8 +8,8 @@ import java.util.stream.Stream;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
-import org.junit.internal.matchers.TypeSafeMatcher;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertThat;
