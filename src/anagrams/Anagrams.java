@@ -7,10 +7,10 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import static java.util.Comparator.comparingInt;
 import java.util.List;
-import java.util.stream.Stream;
-
 import static java.util.stream.Collectors.groupingByConcurrent;
+import java.util.stream.Stream;
 
 public class Anagrams {
 
@@ -52,6 +52,5 @@ public class Anagrams {
             (Collection<String> o1, Collection<String> o2)
                 -> o1.iterator().next().length() - o2.iterator().next().length();
 
-    private static final Comparator<Collection<String>> mostWords =
-            (Collection<String> o1, Collection<String> o2) -> o1.size() - o2.size();
+    private static final Comparator<Collection<String>> mostWords = comparingInt(Collection::size);
 }
