@@ -49,8 +49,8 @@ public class Anagrams {
     }
 
     private static final Comparator<Collection<String>> mostLetters =
-            (Collection<String> o1, Collection<String> o2)
-                -> o1.iterator().next().length() - o2.iterator().next().length();
+        comparingInt(cs -> cs.iterator().next().length());
 
-    private static final Comparator<Collection<String>> mostWords = comparingInt(Collection::size);
+    private static final Comparator<Collection<String>> mostWords =
+        comparingInt(Collection::size);
 }
